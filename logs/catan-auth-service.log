@@ -12016,3 +12016,150 @@ insert into players (email,first_name,password,role,username,id) values (?,?,?,?
 2025-01-16 13:38:37 [http-nio-8080-exec-1] INFO  c.dzieger.controllers.AuthController - Login endpoint hit
 2025-01-16 13:38:37 [http-nio-8080-exec-1] DEBUG c.dzieger.controllers.AuthController - Logging in player: com.dzieger.dtos.LoginDTO@5c491af5
 2025-01-16 13:38:37 [http-nio-8080-exec-1] INFO  com.dzieger.services.PlayerService - Logging in player: user1
+2025-01-16 13:47:51 [main] INFO  com.dzieger.AuthServiceApplication - Starting AuthServiceApplication v0.0.1-SNAPSHOT using Java 22.0.1 with PID 29960 (D:\CATAN-JAVA\AuthService\target\AuthService-0.0.1-SNAPSHOT.jar started by david in D:\CATAN-JAVA\AuthService)
+2025-01-16 13:47:51 [main] DEBUG com.dzieger.AuthServiceApplication - Running with Spring Boot v3.4.1, Spring v6.2.1
+2025-01-16 13:47:51 [main] INFO  com.dzieger.AuthServiceApplication - No active profile set, falling back to 1 default profile: "default"
+2025-01-16 13:47:54 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2025-01-16 13:47:54 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-01-16 13:47:54 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.34]
+2025-01-16 13:47:54 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-01-16 13:47:54 [main] ERROR o.s.b.w.e.tomcat.TomcatStarter - Error starting Tomcat context. Exception: org.springframework.beans.factory.UnsatisfiedDependencyException. Message: Error creating bean with name 'jwtAuthenticationFilter' defined in URL [jar:nested:/D:/CATAN-JAVA/AuthService/target/AuthService-0.0.1-SNAPSHOT.jar/!BOOT-INF/classes/!/com/dzieger/SecurityConfig/JwtAuthenticationFilter.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'jwtUtil' defined in URL [jar:nested:/D:/CATAN-JAVA/AuthService/target/AuthService-0.0.1-SNAPSHOT.jar/!BOOT-INF/classes/!/com/dzieger/SecurityConfig/JwtUtil.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'parameters' defined in URL [jar:nested:/D:/CATAN-JAVA/AuthService/target/AuthService-0.0.1-SNAPSHOT.jar/!BOOT-INF/classes/!/com/dzieger/config/Parameters.class]: Unsatisfied dependency expressed through constructor parameter 0: No qualifying bean of type 'java.lang.String' available: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {@org.springframework.beans.factory.annotation.Qualifier("databaseUrl")}
+2025-01-16 13:47:54 [main] INFO  o.a.catalina.core.StandardService - Stopping service [Tomcat]
+2025-01-16 13:47:54 [main] WARN  o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Unable to start web server
+2025-01-16 13:47:54 [main] ERROR o.s.b.d.LoggingFailureAnalysisReporter - 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Parameter 0 of constructor in com.dzieger.config.Parameters required a bean of type 'java.lang.String' that could not be found.
+
+
+Action:
+
+Consider defining a bean of type 'java.lang.String' in your configuration.
+
+2025-01-16 13:48:07 [main] INFO  com.dzieger.AuthServiceApplication - Starting AuthServiceApplication v0.0.1-SNAPSHOT using Java 22.0.1 with PID 32620 (D:\CATAN-JAVA\AuthService\target\AuthService-0.0.1-SNAPSHOT.jar started by david in D:\CATAN-JAVA\AuthService)
+2025-01-16 13:48:07 [main] DEBUG com.dzieger.AuthServiceApplication - Running with Spring Boot v3.4.1, Spring v6.2.1
+2025-01-16 13:48:07 [main] INFO  com.dzieger.AuthServiceApplication - The following 1 profile is active: "dev"
+2025-01-16 13:48:10 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2025-01-16 13:48:10 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-01-16 13:48:10 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.34]
+2025-01-16 13:48:10 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-01-16 13:48:10 [main] INFO  com.dzieger.config.ParamStoreConfig - Initializing SsmClient
+2025-01-16 13:48:12 [main] INFO  com.dzieger.config.Parameters - Initializing Parameters
+2025-01-16 13:48:12 [main] INFO  com.dzieger.SecurityConfig.JwtUtil - Initializing JwtUtil
+2025-01-16 13:48:12 [main] INFO  com.dzieger.config.DatabaseConfig - Initializing DatabaseConfig
+2025-01-16 13:48:13 [main] WARN  o.h.e.jdbc.spi.SqlExceptionHelper - SQL Warning Code: 0, SQLState: 00000
+2025-01-16 13:48:13 [main] WARN  o.h.e.jdbc.spi.SqlExceptionHelper - constraint "ukp1chj5w2v1nune5xmmd94u1yj" of relation "players" does not exist, skipping
+2025-01-16 13:48:13 [main] WARN  o.h.e.jdbc.spi.SqlExceptionHelper - SQL Warning Code: 0, SQLState: 00000
+2025-01-16 13:48:13 [main] WARN  o.h.e.jdbc.spi.SqlExceptionHelper - constraint "ukpnrwm9bkjel7qss1ekm05j953" of relation "players" does not exist, skipping
+2025-01-16 13:48:14 [main] DEBUG c.d.S.JwtAuthenticationFilter - Filter 'jwtAuthenticationFilter' configured for use
+2025-01-16 13:48:14 [main] INFO  c.d.SecurityConfig.SecurityConfig - Configuring global authentication manager
+2025-01-16 13:48:14 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-01-16 13:48:14 [main] INFO  c.d.SecurityConfig.SecurityConfig - Configuring security filter chain
+2025-01-16 13:48:15 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2025-01-16 13:48:15 [main] INFO  com.dzieger.AuthServiceApplication - Started AuthServiceApplication in 8.332 seconds (process running for 9.089)
+2025-01-16 13:49:45 [http-nio-8080-exec-2] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-01-16 13:49:45 [http-nio-8080-exec-2] INFO  c.d.S.JwtAuthenticationFilter - Processing request: /auth/register
+2025-01-16 13:49:45 [http-nio-8080-exec-2] DEBUG c.d.S.JwtAuthenticationFilter - Extracting token from request
+2025-01-16 13:49:45 [http-nio-8080-exec-4] INFO  c.d.S.JwtAuthenticationFilter - Processing request: /auth/login
+2025-01-16 13:49:45 [http-nio-8080-exec-4] DEBUG c.d.S.JwtAuthenticationFilter - Extracting token from request
+2025-01-16 13:49:45 [http-nio-8080-exec-4] INFO  c.dzieger.controllers.AuthController - Login endpoint hit
+2025-01-16 13:49:45 [http-nio-8080-exec-4] DEBUG c.dzieger.controllers.AuthController - Logging in player: com.dzieger.dtos.LoginDTO@20d034f
+2025-01-16 13:49:45 [http-nio-8080-exec-4] INFO  com.dzieger.services.PlayerService - Logging in player: {{username}}
+2025-01-16 13:53:48 [http-nio-8080-exec-6] INFO  c.d.S.JwtAuthenticationFilter - Processing request: /auth/register
+2025-01-16 13:53:48 [http-nio-8080-exec-6] DEBUG c.d.S.JwtAuthenticationFilter - Extracting token from request
+2025-01-16 13:53:48 [http-nio-8080-exec-6] INFO  c.dzieger.controllers.AuthController - Register endpoint hit
+2025-01-16 13:53:48 [http-nio-8080-exec-6] DEBUG c.dzieger.controllers.AuthController - Registering player: RegisterDTO{firstName='John', email='validuser1@example.com', password='Valid@123', username='user1'}
+2025-01-16 13:53:48 [http-nio-8080-exec-6] INFO  com.dzieger.services.PlayerService - Registering new player: user1
+2025-01-16 13:53:48 [http-nio-8080-exec-6] INFO  com.dzieger.services.PlayerService - Checking for duplicate username: user1
+2025-01-16 13:53:48 [http-nio-8080-exec-6] INFO  com.dzieger.services.PlayerService - Checking for duplicate email
+2025-01-16 13:53:49 [http-nio-8080-exec-7] INFO  c.d.S.JwtAuthenticationFilter - Processing request: /auth/login
+2025-01-16 13:53:49 [http-nio-8080-exec-7] DEBUG c.d.S.JwtAuthenticationFilter - Extracting token from request
+2025-01-16 13:53:49 [http-nio-8080-exec-7] INFO  c.dzieger.controllers.AuthController - Login endpoint hit
+2025-01-16 13:53:49 [http-nio-8080-exec-7] DEBUG c.dzieger.controllers.AuthController - Logging in player: com.dzieger.dtos.LoginDTO@761a59da
+2025-01-16 13:53:49 [http-nio-8080-exec-7] INFO  com.dzieger.services.PlayerService - Logging in player: user1
+2025-01-16 13:53:49 [http-nio-8080-exec-8] INFO  c.d.S.JwtAuthenticationFilter - Processing request: /auth/register
+2025-01-16 13:53:49 [http-nio-8080-exec-8] DEBUG c.d.S.JwtAuthenticationFilter - Extracting token from request
+2025-01-16 13:53:49 [http-nio-8080-exec-8] INFO  c.dzieger.controllers.AuthController - Register endpoint hit
+2025-01-16 13:53:49 [http-nio-8080-exec-8] DEBUG c.dzieger.controllers.AuthController - Registering player: RegisterDTO{firstName='UsernameDuplicate', email='duplicateuser@email.com', password='Valid@123', username='user1'}
+2025-01-16 13:53:49 [http-nio-8080-exec-8] INFO  com.dzieger.services.PlayerService - Registering new player: user1
+2025-01-16 13:53:49 [http-nio-8080-exec-8] INFO  com.dzieger.services.PlayerService - Checking for duplicate username: user1
+2025-01-16 13:53:49 [http-nio-8080-exec-9] INFO  c.d.S.JwtAuthenticationFilter - Processing request: /auth/login
+2025-01-16 13:53:49 [http-nio-8080-exec-9] DEBUG c.d.S.JwtAuthenticationFilter - Extracting token from request
+2025-01-16 13:53:49 [http-nio-8080-exec-9] INFO  c.dzieger.controllers.AuthController - Login endpoint hit
+2025-01-16 13:53:49 [http-nio-8080-exec-9] DEBUG c.dzieger.controllers.AuthController - Logging in player: com.dzieger.dtos.LoginDTO@6680ac85
+2025-01-16 13:53:49 [http-nio-8080-exec-9] INFO  com.dzieger.services.PlayerService - Logging in player: user1
+2025-01-16 13:53:50 [http-nio-8080-exec-10] INFO  c.d.S.JwtAuthenticationFilter - Processing request: /auth/register
+2025-01-16 13:53:50 [http-nio-8080-exec-10] DEBUG c.d.S.JwtAuthenticationFilter - Extracting token from request
+2025-01-16 13:53:50 [http-nio-8080-exec-10] INFO  c.dzieger.controllers.AuthController - Register endpoint hit
+2025-01-16 13:53:50 [http-nio-8080-exec-10] DEBUG c.dzieger.controllers.AuthController - Registering player: RegisterDTO{firstName='EmailDuplicate', email='validuser1@example.com', password='Valid@123', username='user2'}
+2025-01-16 13:53:50 [http-nio-8080-exec-10] INFO  com.dzieger.services.PlayerService - Registering new player: user2
+2025-01-16 13:53:50 [http-nio-8080-exec-10] INFO  com.dzieger.services.PlayerService - Checking for duplicate username: user2
+2025-01-16 13:53:50 [http-nio-8080-exec-10] INFO  com.dzieger.services.PlayerService - Checking for duplicate email
+2025-01-16 13:53:50 [http-nio-8080-exec-1] INFO  c.d.S.JwtAuthenticationFilter - Processing request: /auth/login
+2025-01-16 13:53:50 [http-nio-8080-exec-1] DEBUG c.d.S.JwtAuthenticationFilter - Extracting token from request
+2025-01-16 13:53:50 [http-nio-8080-exec-1] INFO  c.dzieger.controllers.AuthController - Login endpoint hit
+2025-01-16 13:53:50 [http-nio-8080-exec-1] DEBUG c.dzieger.controllers.AuthController - Logging in player: com.dzieger.dtos.LoginDTO@4a766913
+2025-01-16 13:53:50 [http-nio-8080-exec-1] INFO  com.dzieger.services.PlayerService - Logging in player: user2
+2025-01-16 13:53:50 [http-nio-8080-exec-3] INFO  c.d.S.JwtAuthenticationFilter - Processing request: /auth/register
+2025-01-16 13:53:50 [http-nio-8080-exec-3] DEBUG c.d.S.JwtAuthenticationFilter - Extracting token from request
+2025-01-16 13:53:50 [http-nio-8080-exec-5] INFO  c.d.S.JwtAuthenticationFilter - Processing request: /auth/login
+2025-01-16 13:53:50 [http-nio-8080-exec-5] DEBUG c.d.S.JwtAuthenticationFilter - Extracting token from request
+2025-01-16 13:53:50 [http-nio-8080-exec-5] INFO  c.dzieger.controllers.AuthController - Login endpoint hit
+2025-01-16 13:53:50 [http-nio-8080-exec-5] DEBUG c.dzieger.controllers.AuthController - Logging in player: com.dzieger.dtos.LoginDTO@13c5b2b6
+2025-01-16 13:53:50 [http-nio-8080-exec-5] INFO  com.dzieger.services.PlayerService - Logging in player: user3
+2025-01-16 13:53:50 [http-nio-8080-exec-7] INFO  c.d.S.JwtAuthenticationFilter - Processing request: /auth/register
+2025-01-16 13:53:50 [http-nio-8080-exec-7] DEBUG c.d.S.JwtAuthenticationFilter - Extracting token from request
+2025-01-16 13:53:50 [http-nio-8080-exec-9] INFO  c.d.S.JwtAuthenticationFilter - Processing request: /auth/login
+2025-01-16 13:53:50 [http-nio-8080-exec-9] DEBUG c.d.S.JwtAuthenticationFilter - Extracting token from request
+2025-01-16 13:53:50 [http-nio-8080-exec-9] INFO  c.dzieger.controllers.AuthController - Login endpoint hit
+2025-01-16 13:53:50 [http-nio-8080-exec-9] DEBUG c.dzieger.controllers.AuthController - Logging in player: com.dzieger.dtos.LoginDTO@35791ea7
+2025-01-16 13:53:50 [http-nio-8080-exec-9] INFO  com.dzieger.services.PlayerService - Logging in player: user4
+2025-01-16 13:53:50 [http-nio-8080-exec-1] INFO  c.d.S.JwtAuthenticationFilter - Processing request: /auth/register
+2025-01-16 13:53:50 [http-nio-8080-exec-1] DEBUG c.d.S.JwtAuthenticationFilter - Extracting token from request
+2025-01-16 13:53:50 [http-nio-8080-exec-3] INFO  c.d.S.JwtAuthenticationFilter - Processing request: /auth/login
+2025-01-16 13:53:50 [http-nio-8080-exec-3] DEBUG c.d.S.JwtAuthenticationFilter - Extracting token from request
+2025-01-16 13:53:50 [http-nio-8080-exec-5] INFO  c.d.S.JwtAuthenticationFilter - Processing request: /auth/register
+2025-01-16 13:53:50 [http-nio-8080-exec-5] DEBUG c.d.S.JwtAuthenticationFilter - Extracting token from request
+2025-01-16 13:53:50 [http-nio-8080-exec-7] INFO  c.d.S.JwtAuthenticationFilter - Processing request: /auth/login
+2025-01-16 13:53:50 [http-nio-8080-exec-7] DEBUG c.d.S.JwtAuthenticationFilter - Extracting token from request
+2025-01-16 13:53:50 [http-nio-8080-exec-7] INFO  c.dzieger.controllers.AuthController - Login endpoint hit
+2025-01-16 13:53:50 [http-nio-8080-exec-7] DEBUG c.dzieger.controllers.AuthController - Logging in player: com.dzieger.dtos.LoginDTO@3aa898ff
+2025-01-16 13:53:50 [http-nio-8080-exec-7] INFO  com.dzieger.services.PlayerService - Logging in player: user5
+2025-01-16 13:53:51 [http-nio-8080-exec-9] INFO  c.d.S.JwtAuthenticationFilter - Processing request: /auth/register
+2025-01-16 13:53:51 [http-nio-8080-exec-9] DEBUG c.d.S.JwtAuthenticationFilter - Extracting token from request
+2025-01-16 13:53:51 [http-nio-8080-exec-1] INFO  c.d.S.JwtAuthenticationFilter - Processing request: /auth/login
+2025-01-16 13:53:51 [http-nio-8080-exec-1] DEBUG c.d.S.JwtAuthenticationFilter - Extracting token from request
+2025-01-16 13:53:51 [http-nio-8080-exec-3] INFO  c.d.S.JwtAuthenticationFilter - Processing request: /auth/register
+2025-01-16 13:53:51 [http-nio-8080-exec-3] DEBUG c.d.S.JwtAuthenticationFilter - Extracting token from request
+2025-01-16 13:53:51 [http-nio-8080-exec-5] INFO  c.d.S.JwtAuthenticationFilter - Processing request: /auth/login
+2025-01-16 13:53:51 [http-nio-8080-exec-5] DEBUG c.d.S.JwtAuthenticationFilter - Extracting token from request
+2025-01-16 13:53:51 [http-nio-8080-exec-5] INFO  c.dzieger.controllers.AuthController - Login endpoint hit
+2025-01-16 13:53:51 [http-nio-8080-exec-5] DEBUG c.dzieger.controllers.AuthController - Logging in player: com.dzieger.dtos.LoginDTO@3ef8a0fe
+2025-01-16 13:53:51 [http-nio-8080-exec-5] INFO  com.dzieger.services.PlayerService - Logging in player: user7
+2025-01-16 13:53:51 [http-nio-8080-exec-7] INFO  c.d.S.JwtAuthenticationFilter - Processing request: /auth/register
+2025-01-16 13:53:51 [http-nio-8080-exec-7] DEBUG c.d.S.JwtAuthenticationFilter - Extracting token from request
+2025-01-16 13:53:51 [http-nio-8080-exec-7] INFO  c.dzieger.controllers.AuthController - Register endpoint hit
+2025-01-16 13:53:51 [http-nio-8080-exec-7] DEBUG c.dzieger.controllers.AuthController - Registering player: RegisterDTO{firstName='LoginValid', email='validlogin@email.com', password='Valid@123', username='user1'}
+2025-01-16 13:53:51 [http-nio-8080-exec-7] INFO  com.dzieger.services.PlayerService - Registering new player: user1
+2025-01-16 13:53:51 [http-nio-8080-exec-7] INFO  com.dzieger.services.PlayerService - Checking for duplicate username: user1
+2025-01-16 13:53:51 [http-nio-8080-exec-8] INFO  c.d.S.JwtAuthenticationFilter - Processing request: /auth/login
+2025-01-16 13:53:51 [http-nio-8080-exec-8] DEBUG c.d.S.JwtAuthenticationFilter - Extracting token from request
+2025-01-16 13:53:51 [http-nio-8080-exec-8] INFO  c.dzieger.controllers.AuthController - Login endpoint hit
+2025-01-16 13:53:51 [http-nio-8080-exec-8] DEBUG c.dzieger.controllers.AuthController - Logging in player: com.dzieger.dtos.LoginDTO@7188d72f
+2025-01-16 13:53:51 [http-nio-8080-exec-8] INFO  com.dzieger.services.PlayerService - Logging in player: user1
+2025-01-16 13:53:51 [http-nio-8080-exec-9] INFO  c.d.S.JwtAuthenticationFilter - Processing request: /auth/register
+2025-01-16 13:53:51 [http-nio-8080-exec-9] DEBUG c.d.S.JwtAuthenticationFilter - Extracting token from request
+2025-01-16 13:53:51 [http-nio-8080-exec-9] INFO  c.dzieger.controllers.AuthController - Register endpoint hit
+2025-01-16 13:53:51 [http-nio-8080-exec-9] DEBUG c.dzieger.controllers.AuthController - Registering player: RegisterDTO{firstName='LoginInvalid', email='invalidlogin@email.com', password='Invalid@123', username='user1'}
+2025-01-16 13:53:51 [http-nio-8080-exec-9] INFO  com.dzieger.services.PlayerService - Registering new player: user1
+2025-01-16 13:53:51 [http-nio-8080-exec-9] INFO  com.dzieger.services.PlayerService - Checking for duplicate username: user1
+2025-01-16 13:53:52 [http-nio-8080-exec-10] INFO  c.d.S.JwtAuthenticationFilter - Processing request: /auth/login
+2025-01-16 13:53:52 [http-nio-8080-exec-10] DEBUG c.d.S.JwtAuthenticationFilter - Extracting token from request
+2025-01-16 13:53:52 [http-nio-8080-exec-10] INFO  c.dzieger.controllers.AuthController - Login endpoint hit
+2025-01-16 13:53:52 [http-nio-8080-exec-10] DEBUG c.dzieger.controllers.AuthController - Logging in player: com.dzieger.dtos.LoginDTO@7ec3d157
+2025-01-16 13:53:52 [http-nio-8080-exec-10] INFO  com.dzieger.services.PlayerService - Logging in player: user1
