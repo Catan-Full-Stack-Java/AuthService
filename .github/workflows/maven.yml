@@ -54,9 +54,9 @@ jobs:
     - name: Start services with Docker Compose
       run: docker-compose up -d --build
       env:
-        SPRING_DATASOURCE_USERNAME: ${{ secrets.SPRING_DATASOURCE_USERNAME }}
-        SPRING_DATASOURCE_PASSWORD: ${{ secrets.SPRING_DATASOURCE_PASSWORD }}
-        SPRING_DATASOURCE_URL: ${{ secrets.SPRING_DATASOURCE_PASSWORD }}
+        SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/catan_db
+        SPRING_DATASOURCE_USERNAME: postgres
+        SPRING_DATASOURCE_PASSWORD: password
 
     - name: Wait for Auth Service
       run: |
