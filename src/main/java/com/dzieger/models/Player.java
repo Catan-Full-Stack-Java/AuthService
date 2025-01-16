@@ -12,7 +12,10 @@ import java.util.UUID;
 
 @Component
 @Entity
-@Table(name = "players")
+@Table(name = "players", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "username"),
+        @UniqueConstraint(columnNames = "email")
+})
 public class Player implements UserDetails {
 
     @Id
@@ -115,7 +118,7 @@ public class Player implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        return List.of(this::getRole);
     }
 
     @Override

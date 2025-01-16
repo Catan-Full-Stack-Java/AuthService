@@ -105,7 +105,7 @@ public class PlayerService {
                 outgoingAuthenticatedPlayerDTO.setFirstName(player.getFirstName());
                 outgoingAuthenticatedPlayerDTO.setUsername(player.getUsername());
                 outgoingAuthenticatedPlayerDTO.setRole(player.getRole());
-                outgoingAuthenticatedPlayerDTO.setToken(jwtUtil.generateToken(player.getId(), authorities));
+                outgoingAuthenticatedPlayerDTO.setToken(jwtUtil.generateToken(player, authorities));
                 return outgoingAuthenticatedPlayerDTO;
             } else {
                 throw new BadCredentialsException("Invalid username or password");

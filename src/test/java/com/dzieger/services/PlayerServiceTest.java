@@ -269,7 +269,7 @@ public class PlayerServiceTest {
 
         when(playerRepository.findByUsername("jdoe")).thenReturn(Optional.of(player));
         when(passwordEncoder.matches("password", "encodedPassword")).thenReturn(true);
-        when(jwtUtil.generateToken(player.getId(), List.of(Role.PLAYER.toString(), player.getUsername()))).thenReturn("mockedJwtToken");
+        when(jwtUtil.generateToken(player, List.of(Role.PLAYER.toString(), player.getUsername()))).thenReturn("mockedJwtToken");
 
         // Act
         OutgoingAuthenticatedPlayerDTO result = playerService.login(loginDTO);
