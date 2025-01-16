@@ -41,9 +41,6 @@ jobs:
       with:
         node-version: '16'
 
-    - name: Install Newman
-      run: npm install -g newman
-
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v3
       with:
@@ -84,7 +81,7 @@ jobs:
 
     - name: Run Newman Tests
       run: |
-         newman run tests/postman/collections.json \
+         newman run tests/postman/collection.json \
            -e tests/postman/environment.json \
            --iteration-data tests/postman/registerAPITestData.json \
            --reporters cli,json \
