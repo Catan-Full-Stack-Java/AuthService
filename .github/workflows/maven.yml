@@ -74,13 +74,15 @@ jobs:
 
     # Step 10: Run Docker Container
     - name: Run Docker Container
-      run: docker run -d \
-        --name catan-auth-api \
-        -e AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} \
-        -e AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} \
-        -e AWS_REGION=${{ secrets.AWS_REGION }} \
-        -p 8080:8080 \
-        catan-auth-api
+      run: |
+        docker run -d \
+          --name catan-auth-api \
+          -e AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} \
+          -e AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} \
+          -e AWS_REGION=${{ secrets.AWS_REGION }} \
+          -p 8080:8080 \
+          catan-auth-api
+
 
     # Step 11: Run Newman Tests
     - name: Run Newman Tests
