@@ -95,11 +95,14 @@ jobs:
     # Step 12: Run Newman Tests
     - name: Run Newman Tests
       run: |
-          newman run /tests/postman/collection.json \
-          -e /tests/postman/environment.json \
-          --iteration-data /tests/postman/registerAPITestData.json \
+        newman run tests/postman/collection.json \
+          -e tests/postman/environment.json \
+          --iteration-data tests/postman/registerAPITestData.json \
           --reporters cli,json \
           --reporter-json-export results.json
+
+
+
 
     # Step 13: Upload Newman Test Results
     - name: Upload Newman Test Results
