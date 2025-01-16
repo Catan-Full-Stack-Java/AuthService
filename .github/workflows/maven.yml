@@ -83,8 +83,16 @@ jobs:
           -p 8080:8080 \
           catan-auth-api
 
+    # Step 11: Wait for Service to Start
+    - name: Wait for Auth Service
+      run: |
+        for i in {1..60}; do
+          curl -sSf http://localhost:8080/health && break || sleep 5;
+        done
+      shell: bash
 
-    # Step 11: Run Newman Tests
+
+    # Step 12: Run Newman Tests
     - name: Run Newman Tests
       run: |
           run /tests/postman/collection.json \
@@ -93,14 +101,14 @@ jobs:
           --reporters cli,json \
           --reporter-json-export results.json
 
-    # Step 12: Upload Newman Test Results
+    # Step 13: Upload Newman Test Results
     - name: Upload Newman Test Results
       uses: actions/upload-artifact@v3
       with:
         name: newman-report
         path: results.json
 
-    # Step 13: Docker Tear Down
+    # Step 14: Docker Tear Down
     - name: Docker Tear Down
       run: docker stop catan-auth-api && docker rm catan-auth-api
   
