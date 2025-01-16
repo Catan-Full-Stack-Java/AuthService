@@ -5,6 +5,6 @@ WORKDIR
 
 COPY target/scala-2.13/akka-http-quickstart-assembly-0.1.jar
 
-EXPOSE 5500
+EXPOSE 8080
 
 ENTRYPOINT ["java", "-jar", "app.jar"]
