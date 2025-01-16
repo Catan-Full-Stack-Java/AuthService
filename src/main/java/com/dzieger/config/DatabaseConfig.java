@@ -2,14 +2,15 @@ package com.dzieger.config;
 
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 import javax.sql.DataSource;
 
 @Configuration
+@Profile({"dev", "prod"})
 public class DatabaseConfig {
 
     private final Parameters params;
@@ -36,6 +37,7 @@ public class DatabaseConfig {
         dataSource.setUrl("jdbc:postgresql://" + databaseUrl);
         dataSource.setUsername(databaseUsername);
         dataSource.setPassword(databasePassword);
+        dataSource.setSchema("catan_auth_db");
         return dataSource;
     }
 

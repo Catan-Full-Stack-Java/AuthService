@@ -3,16 +3,14 @@ package com.dzieger.dtos;
 public class OutgoingPlayerDTO {
 
     private String firstName;
-    private String lastName;
     private String username;
     private String role;
 
     public OutgoingPlayerDTO() {
     }
 
-    public OutgoingPlayerDTO(String firstName, String lastName, String username, String role) {
+    public OutgoingPlayerDTO(String firstName, String username, String role) {
         this.firstName = firstName;
-        this.lastName = lastName;
         this.username = username;
         this.role = role;
     }
@@ -23,14 +21,6 @@ public class OutgoingPlayerDTO {
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
     }
 
     public String getUsername() {
@@ -47,5 +37,14 @@ public class OutgoingPlayerDTO {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    @Override
+    public String toString() {
+        return "OutgoingPlayerDTO{" +
+                "firstName='" + firstName + '\'' +
+                ", username='" + username + '\'' +
+                ", role='" + role + '\'' +
+                '}';
     }
 }

@@ -12,7 +12,10 @@ import java.util.UUID;
 
 @Component
 @Entity
-@Table(name = "players")
+@Table(name = "players", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "username"),
+        @UniqueConstraint(columnNames = "email")
+})
 public class Player implements UserDetails {
 
     @Id
@@ -32,7 +35,7 @@ public class Player implements UserDetails {
     private String password;
 
     @Column(name = "role", nullable = false)
-    private Role role;
+    private String role;
 
     public Player() {
     }
@@ -42,7 +45,7 @@ public class Player implements UserDetails {
         this.username = username;
         this.email = email;
         this.password = password;
-        this.role = role;
+        this.role = role.toString();
     }
 
     public UUID getId() {
@@ -85,12 +88,12 @@ public class Player implements UserDetails {
         this.password = password;
     }
 
-    public Role getRole() {
+    public String getRole() {
         return role;
     }
 
     public void setRole(Role role) {
-        this.role = role;
+        this.role = role.toString();
     }
 
     @Override
@@ -115,7 +118,7 @@ public class Player implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        return List.of(this::getRole);
     }
 
     @Override
