@@ -59,6 +59,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
                         .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/health").permitAll()
                         .requestMatchers("/swagger/**").permitAll()
                         .requestMatchers("/swagger-ui/index.html").permitAll()
                         .requestMatchers("/swagger/index.html").permitAll()
