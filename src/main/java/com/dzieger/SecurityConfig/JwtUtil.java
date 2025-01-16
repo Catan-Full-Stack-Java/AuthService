@@ -10,6 +10,8 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
 import jakarta.annotation.PostConstruct;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -19,6 +21,8 @@ import java.util.UUID;
 
 @Component
 public class JwtUtil {
+
+    private static final Logger log = LoggerFactory.getLogger(JwtUtil.class);
 
     private long jwtExpiration;
     private String jwtSecret;
@@ -33,6 +37,8 @@ public class JwtUtil {
 
     @PostConstruct
     public void init() {
+        log.info("Initializing JwtUtil");
+
         this.jwtExpiration = Long.parseLong(params.getJwtExpiration());
         this.jwtSecret = params.getJwtSecret();
         this.jwtIssuer = params.getJwtIssuer();

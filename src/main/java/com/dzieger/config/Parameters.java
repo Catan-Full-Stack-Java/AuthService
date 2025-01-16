@@ -1,11 +1,15 @@
 package com.dzieger.config;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 @Component
 public class Parameters {
+
+    private static Logger log = LoggerFactory.getLogger(Parameters.class);
 
     private String databaseUrl;
     private String databaseUsername;
@@ -23,6 +27,7 @@ public class Parameters {
             @Qualifier("jwtSecret") String jwtSecret,
             @Qualifier("jwtExpiration") String jwtExpiration,
             @Qualifier("jwtIssuer") String jwtIssuer) {
+        log.info("Initializing Parameters");
         this.databaseUrl = databaseUrl;
         this.databaseUsername = databaseUsername;
         this.databasePassword = databasePassword;

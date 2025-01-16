@@ -1,5 +1,7 @@
 package com.dzieger.config;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,6 +16,8 @@ import software.amazon.awssdk.services.ssm.model.GetParameterRequest;
 @Configuration
 public class ParamStoreConfig {
 
+    private static final Logger log = LoggerFactory.getLogger(ParamStoreConfig.class);
+
     private final Environment environment;
 
     public ParamStoreConfig(Environment environment) {
@@ -27,6 +31,7 @@ public class ParamStoreConfig {
 
     @Bean
     public SsmClient ssmClient() {
+        log.info("Initializing SsmClient");
         return SsmClient.builder()
                 .region(Region.US_EAST_2)
                 .credentialsProvider(DefaultCredentialsProvider.create())

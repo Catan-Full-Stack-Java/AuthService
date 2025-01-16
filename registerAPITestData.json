@@ -1,0 +1,123 @@
+[
+  {
+    "testCase": "Valid Registration",
+    "username": "validuser1",
+    "email": "validuser1@example.com",
+    "password": "Valid@123",
+    "firstName": "John",
+    "expectedStatusRegister": 201,
+    "expectedMessageRegister": "Player registered successfully",
+    "expectedStatusLogin": 200,
+    "expectedMessageLogin": "Login successful"
+  },
+  {
+    "testCase": "Duplicate Username",
+    "username": "duplicateuser",
+    "email": "newemail@example.com",
+    "password": "Valid@123",
+    "firstName": "Jane",
+    "expectedStatusRegister": 409,
+    "expectedMessageRegister": "Username already exists",
+    "expectedStatusLogin": 400,
+    "expectedMessageLogin": "Invalid username or password"
+  },
+  {
+    "testCase": "Duplicate Email",
+    "username": "newusername",
+    "email": "duplicate@example.com",
+    "password": "Valid@123",
+    "firstName": "Jane",
+    "expectedStatusRegister": 409,
+    "expectedMessageRegister": "Email already exists",
+    "expectedStatusLogin": 400,
+    "expectedMessageLogin": "Invalid username or password"
+  },
+  {
+    "testCase": "Invalid Email Format",
+    "username": "invalidemailuser",
+    "email": "invalidemail",
+    "password": "Valid@123",
+    "firstName": "Jack",
+    "expectedStatusRegister": 400,
+    "expectedMessageRegister": "Invalid email format",
+    "expectedStatusLogin": 400,
+    "expectedMessageLogin": "Invalid username or password"
+  },
+  {
+    "testCase": "Weak Password",
+    "username": "weakpassworduser",
+    "email": "weakpassword@example.com",
+    "password": "weak",
+    "firstName": "Mike",
+    "expectedStatusRegister": 400,
+    "expectedMessageRegister": "Password does not meet complexity requirements",
+    "expectedStatusLogin": 400,
+    "expectedMessageLogin": "Invalid username or password"
+  },
+  {
+    "testCase": "Missing Username",
+    "username": "",
+    "email": "missingusername@example.com",
+    "password": "Valid@123",
+    "firstName": "Sam",
+    "expectedStatusRegister": 400,
+    "expectedMessageRegister": "Username is required",
+    "expectedStatusLogin": 400,
+    "expectedMessageLogin": "Invalid username or password"
+  },
+  {
+    "testCase": "Missing Email",
+    "username": "missingemailuser",
+    "email": "",
+    "password": "Valid@123",
+    "firstName": "Alex",
+    "expectedStatusRegister": 400,
+    "expectedMessageRegister": "Email is required",
+    "expectedStatusLogin": 400,
+    "expectedMessageLogin": "Invalid username or password"
+  },
+  {
+    "testCase": "Missing Password",
+    "username": "missingpassworduser",
+    "email": "missingpassword@example.com",
+    "password": "",
+    "firstName": "Taylor",
+    "expectedStatusRegister": 400,
+    "expectedMessageRegister": "Password is required",
+    "expectedStatusLogin": 400,
+    "expectedMessageLogin": "Invalid username or password"
+  },
+  {
+    "testCase": "Missing First Name",
+    "username": "missingfirstnameuser",
+    "email": "missingfirstname@example.com",
+    "password": "Valid@123",
+    "firstName": "",
+    "expectedStatusRegister": 400,
+    "expectedMessageRegister": "First name is required",
+    "expectedStatusLogin": 400,
+    "expectedMessageLogin": "Invalid username or password"
+  },
+  {
+    "testCase": "Valid Login",
+    "username": "validuser2",
+    "email": "validuser2@example.com",
+    "password": "Valid@123",
+    "firstName": "Chris",
+    "expectedStatusRegister": 201,
+    "expectedMessageRegister": "Player registered successfully",
+    "expectedStatusLogin": 200,
+    "expectedMessageLogin": "Login successful"
+  },
+  {
+    "testCase": "Invalid Login Credentials",
+    "username": "validuser2",
+    "email": "validuser2@example.com",
+    "password": "WrongPassword",
+    "firstName": "Chris",
+    "expectedStatusRegister": 201,
+    "expectedMessageRegister": "Player registered successfully",
+    "expectedStatusLogin": 401,
+    "expectedMessageLogin": "Invalid username or password"
+  }
+]

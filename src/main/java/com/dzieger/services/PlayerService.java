@@ -10,19 +10,20 @@ import com.dzieger.exceptions.DuplicateUsernameException;
 import com.dzieger.models.Player;
 import com.dzieger.models.enums.Role;
 import com.dzieger.repositories.PlayerRepository;
-import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 public class PlayerService {
+
+    private static final Logger log = LoggerFactory.getLogger(PlayerService.class);
 
     private final PlayerRepository playerRepository;
 
@@ -36,22 +37,10 @@ public class PlayerService {
         this.jwtUtil = jwtUtil;
     }
 
-    public String getUsernameByUserId(UUID userId) {
-        if (playerRepository.findById(userId).isPresent()) {
-            return playerRepository.findById(userId).get().getUsername();
-        }
-        return null;
-    }
-
-    public UserDetails loadUserByUsername(String username) {
-        if (playerRepository.findByUsername(username).isPresent()) {
-            return (UserDetails) playerRepository.findByUsername(username).get();
-        }
-        return null;
-    }
-
 
     public OutgoingPlayerDTO register(RegisterDTO registerDTO) {
+        log.info("Registering new player: {}", registerDTO.getUsername());
+
         checkDuplicateUsername(registerDTO.getUsername().toLowerCase());
         checkDuplicateEmail(registerDTO.getEmail().toLowerCase());
 
@@ -72,12 +61,16 @@ public class PlayerService {
     }
 
     private void checkDuplicateUsername(String username) {
+        log.info("Checking for duplicate username: {}", username);
+
         if (playerRepository.findByUsername(username).isPresent()) {
             throw new DuplicateUsernameException("Username already exists");
         }
     }
 
     private void checkDuplicateEmail(String email) {
+        log.info("Checking for duplicate email");
+
         if (playerRepository.findByEmail(email).isPresent()) {
             throw new DuplicateEmailException("Email already exists");
         }
@@ -92,6 +85,7 @@ public class PlayerService {
     }
 
     public OutgoingAuthenticatedPlayerDTO login(LoginDTO loginDTO) {
+        log.info("Logging in player: {}", loginDTO.getUsername());
 
         if (playerRepository.findByUsername(loginDTO.getUsername().toLowerCase()).isPresent()) {
             Player player = playerRepository.findByUsername(loginDTO.getUsername().toLowerCase()).orElseThrow(() ->
