@@ -9,7 +9,6 @@
 name: Java CI with Maven
 
 permissions:
-  actions: read|write
   contents: read
   security-events: write
 
