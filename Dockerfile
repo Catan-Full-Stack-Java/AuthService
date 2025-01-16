@@ -2,7 +2,7 @@ FROM openjdk:17-alpine
 
 WORKDIR /app
 
-COPY target/scala-2.13/akka-http-quickstart-assembly-0.1.jar
+COPY target/AuthService-0.0.1-SNAPSHOT.jar app.jar
 
 EXPOSE 8080
 
