@@ -51,6 +51,41 @@ jobs:
     - name: Build with Maven
       run: mvn -B package --file pom.xml -Dspring.profiles.active=test
 
+    - name: Start services with Docker Compose
+      run: docker-compose up -d --build
+      env:
+        SPRING_DATASOURCE_USERNAME: ${{ secrets.SPRING_DATASOURCE_USERNAME }}
+        SPRING_DATASOURCE_PASSWORD: ${{ secrets.SPRING_DATASOURCE_PASSWORD }}
+        SPRING_DATASOURCE_URL: ${{ secrets.SPRING_DATASOURCE_PASSWORD }}
+
+    - name: Wait for Auth Service
+      run: |
+        for i in {1.30}; do
+          curl -sSf http://localhost:8080/health && break || sleep 5;
+        done
+      shell: bash
+
+    - name: Install Newman
+      run: npm install -g newman
+
+    - name: Run Newman Tests
+      run: |
+         newman run tests/postman/collextions.json \
+           -e tests/postman/environment.json \
+           --iteration-data tests/postman/registerAPITestData.json \
+           --reporters cli,json \
+           --reporter-json-export results.json
+
+    - name: Upload Newman Test Report
+      uses: actions/upload-artifact@v3
+      with:
+        name: newman-report
+        path: results.json
+
+    - name: Tear Down Docker Compose
+      if: always()
+      run: docker-compose down
+  
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
     - name: Submit Dependency Snapshot
       uses: advanced-security/maven-dependency-submission-action@v1
