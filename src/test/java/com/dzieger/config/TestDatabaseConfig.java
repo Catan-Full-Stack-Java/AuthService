@@ -5,12 +5,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
+import org.springframework.test.context.ActiveProfiles;
 
 import javax.sql.DataSource;
 
 
 @TestConfiguration
-@Profile("test")
+@ActiveProfiles("test")
 public class TestDatabaseConfig {
     @Bean
     public DataSource dataSource() {
