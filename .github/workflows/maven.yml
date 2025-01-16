@@ -95,7 +95,7 @@ jobs:
     # Step 12: Run Newman Tests
     - name: Run Newman Tests
       run: |
-          run /tests/postman/collection.json \
+          newman run /tests/postman/collection.json \
           -e /tests/postman/environment.json \
           --iteration-data /tests/postman/registerAPITestData.json \
           --reporters cli,json \
