@@ -93,7 +93,7 @@ jobs:
 
     # Step 12: Upload Newman Test Results
     - name: Upload Newman Test Results
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: newman-report
         path: results.json
