@@ -44,9 +44,6 @@ jobs:
     - name: Install Newman
       run: npm install -g newman
 
-    - name: Start services with Docker Compose
-      run: docker-compose up -d --build
-
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v3
       with:
@@ -70,10 +67,10 @@ jobs:
 
     - name: Start services with Docker Compose
       run: docker-compose up -d --build
-      env:
-        SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/catan_db
-        SPRING_DATASOURCE_USERNAME: postgres
-        SPRING_DATASOURCE_PASSWORD: password
+      # env:
+      #   SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/catan_db
+      #   SPRING_DATASOURCE_USERNAME: postgres
+      #   SPRING_DATASOURCE_PASSWORD: password
 
     - name: Wait for Auth Service
       run: |
