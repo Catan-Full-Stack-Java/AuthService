@@ -7,19 +7,19 @@ import jakarta.validation.constraints.Size;
 
 public class RegisterDTO {
 
-    @NotBlank(message = "First name cannot be empty")
+    @NotBlank(message = "{firstName.NotBlank}")
     private String firstName;
 
-    @NotBlank(message = "Email cannot be empty")
-    @Email(message = "Email must be valid")
+    @NotBlank(message = "{email.NotBlank}")
+    @Email(message = "{email.Email}")
     private String email;
 
-    @NotBlank(message = "Password cannot be empty")
-    @ValidPassword
+    @NotBlank(message = "{password.NotBlank}")
+    @ValidPassword(message = "{password.ValidPassword}")
     private String password;
 
-    @NotBlank
-    @Size(min = 3, max = 20, message = "Username must be between 3 and 20 characters")
+    @NotBlank(message = "{username.NotBlank}")
+    @Size(min = 3, max = 20, message = "{username.Size}")
     private String username;
 
     public RegisterDTO() {

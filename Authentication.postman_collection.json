@@ -1,0 +1,155 @@
+{
+	"info": {
+		"_postman_id": "012f5858-a2ac-4b01-9153-eb67c9695c76",
+		"name": "Authentication",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "38104475"
+	},
+	"item": [
+		{
+			"name": "Register",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const expectedStatusRegister = pm.iterationData.get(\"expectedStatusRegister\");\r",
+							"const expectedErrors = pm.iterationData.get(\"expectedErrors\");\r",
+							"\r",
+							"// Assert status code\r",
+							"pm.test(`Status code is ${expectedStatusRegister}`, function () {\r",
+							"  pm.response.to.have.status(expectedStatusRegister);\r",
+							"});\r",
+							"\r",
+							"// Validate error messages\r",
+							"if (expectedErrors) {\r",
+							"  pm.test(\"Response contains expected validation errors\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property(\"error\", \"Validation error\");\r",
+							"    pm.expect(jsonData).to.have.property(\"errors\");\r",
+							"\r",
+							"    const errors = jsonData.errors;\r",
+							"    for (const [field, message] of Object.entries(expectedErrors)) {\r",
+							"      pm.expect(errors).to.have.property(field, message);\r",
+							"    }\r",
+							"  });\r",
+							"}\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\":\"{{username}}\",\r\n    \"password\":\"{{password}}\",\r\n    \"firstName\":\"{{firstName}}\",\r\n    \"email\":\"{{email}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/auth/register",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"auth",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const expectedStatusLogin = pm.iterationData.get(\"expectedStatusLogin\");\r",
+							"const expectedMessageLogin = pm.iterationData.get(\"expectedMessageLogin\");\r",
+							"\r",
+							"// Assert status code\r",
+							"pm.test(`Status code is ${expectedStatusLogin}`, function () {\r",
+							"  pm.response.to.have.status(expectedStatusLogin);\r",
+							"});\r",
+							"\r",
+							"// Assert success message or token presence\r",
+							"if (expectedStatusLogin === 200) {\r",
+							"  pm.test(\"Response contains token\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property(\"token\");\r",
+							"  });\r",
+							"}\r",
+							"\r",
+							"// Handle failure cases\r",
+							"if (expectedStatusLogin !== 200) {\r",
+							"  pm.test(\"Response contains expected error messages\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"\r",
+							"    // Handle object-based error messages\r",
+							"    if (typeof expectedMessageLogin === \"object\") {\r",
+							"      pm.expect(jsonData).to.have.property(\"errors\");\r",
+							"      const errors = jsonData.errors;\r",
+							"\r",
+							"      for (const [field, message] of Object.entries(expectedMessageLogin)) {\r",
+							"        pm.expect(errors).to.have.property(field, message);\r",
+							"      }\r",
+							"    }\r",
+							"\r",
+							"    // Handle single string error messages\r",
+							"    else if (typeof expectedMessageLogin === \"string\") {\r",
+							"      pm.expect(jsonData).to.have.property(\"message\");\r",
+							"      pm.expect(jsonData.message).to.include(expectedMessageLogin);\r",
+							"    }\r",
+							"  });\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\":\"{{username}}\",\r\n    \"password\":\"{{password}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/auth/login",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

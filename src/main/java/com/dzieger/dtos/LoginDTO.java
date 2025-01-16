@@ -4,10 +4,10 @@ import jakarta.validation.constraints.NotBlank;
 
 public class LoginDTO {
 
-    @NotBlank
+    @NotBlank(message = "{username.NotBlank}")
     private String username;
 
-    @NotBlank
+    @NotBlank(message = "{password.NotBlank}")
     private String password;
 
     public LoginDTO() {
