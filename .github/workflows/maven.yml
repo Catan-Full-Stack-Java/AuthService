@@ -87,7 +87,7 @@ jobs:
     - name: Wait for Auth Service
       run: |
         for i in {1..60}; do
-          curl -sSf http://localhost:8080/health && break || sleep 5;
+          curl -sSf http://localhost:8080/actuator/health && break || sleep 5;
         done
       shell: bash
 
