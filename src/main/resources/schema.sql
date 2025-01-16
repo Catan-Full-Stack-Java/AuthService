@@ -1,0 +1,1 @@
+CREATE SCHEMA IF NOT EXISTS catan_auth_db;

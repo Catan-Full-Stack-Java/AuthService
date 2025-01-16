@@ -1,6 +1,6 @@
 package com.dzieger.SecurityConfig;
 
-import com.dzieger.services.PlayerService;
+import com.dzieger.services.AuthService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,12 +22,12 @@ import java.util.UUID;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
-    private final PlayerService playerService;
+    private final AuthService authService;
 
     @Autowired
-    public JwtAuthenticationFilter(JwtUtil jwtUtil, PlayerService playerService) {
+    public JwtAuthenticationFilter(JwtUtil jwtUtil, AuthService authService) {
         this.jwtUtil = jwtUtil;
-        this.playerService = playerService;
+        this.authService = authService;
     }
 
     @Override
@@ -36,7 +36,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         if (token != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             try {
-                String username = playerService.getUsernameByUserId(UUID.fromString(token));
+                String username = authService.loadUserByUsername(jwtUtil.extractUsername(token)).getUsername();
                 setAuthenticationContext(username, token, request);
             } catch (Exception e) {
                 handleTokenException(e);
@@ -55,7 +55,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     private void setAuthenticationContext(String username, String token, HttpServletRequest request) {
-        UserDetails userDetails = playerService.loadUserByUsername(username);
+        UserDetails userDetails = authService.loadUserByUsername(username);
 
         if (jwtUtil.validate(token)) {
             List<SimpleGrantedAuthority> authorities = jwtUtil.extractAuthorities(token).stream()

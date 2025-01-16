@@ -46,6 +46,10 @@ public class JwtUtil {
         return UUID.fromString(extractAllClaims(token).getSubject());
     }
 
+    public String extractUsername(String token) {
+        return extractAllClaims(token).get("username", String.class);
+    }
+
     public boolean validate(String token) {
         Claims claims = extractAllClaims(token);
         if (claims.getIssuer().equals(jwtIssuer)) {
