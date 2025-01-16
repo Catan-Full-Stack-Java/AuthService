@@ -76,16 +76,25 @@ jobs:
         done
       shell: bash
 
+    - name: Debug Docker Containers
+      run: docker ps -a
+
+    - name: Test Auth Service Connectivity
+      run: curl -sSf http://localhost:8080/health
+
     - name: Install Newman
       run: npm install -g newman
 
     - name: Run Newman Tests
       run: |
-         newman run tests/postman/collection.json \
-           -e tests/postman/environment.json \
-           --iteration-data tests/postman/registerAPITestData.json \
-           --reporters cli,json \
-           --reporter-json-export results.json
+        docker run --network container:backend \
+          -v $(pwd)/tests/postman:/etc/newman \
+          postman/newman \
+          run /etc/newman/collection.json \
+          -e /etc/newman/environment.json \
+          --iteration-data /etc/newman/registerAPITestData.json \
+          --reporters cli,json \
+          --reporter-json-export /etc/newman/results.json
 
     - name: Upload Newman Test Report
       uses: actions/upload-artifact@v3
