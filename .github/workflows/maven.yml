@@ -76,6 +76,10 @@ jobs:
         done
       shell: bash
 
+    - name: Debug Backend Logs
+      if: failure()
+      run: docker logs authservice-backend-1
+
     - name: Debug Docker Containers
       run: docker ps -a
 
