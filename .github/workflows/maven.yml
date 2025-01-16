@@ -84,7 +84,7 @@ jobs:
 
     - name: Run Newman Tests
       run: |
-         newman run tests/postman/collextions.json \
+         newman run tests/postman/collections.json \
            -e tests/postman/environment.json \
            --iteration-data tests/postman/registerAPITestData.json \
            --reporters cli,json \
