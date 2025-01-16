@@ -75,7 +75,7 @@ jobs:
     # Step 10: Run Docker Container
     - name: Run Docker Container
       run: docker run -d \
-        --name catan-Authentication-API \
+        --name catan-auth-api \
         -e AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} \
         -e AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} \
         -e AWS_REGION=${{ secrets.AWS_REGION }} \
@@ -100,7 +100,7 @@ jobs:
 
     # Step 13: Docker Tear Down
     - name: Docker Tear Down
-      run: docker stop catan-Authentication-API && docker rm catan-Authentication-API
+      run: docker stop catan-auth-api && docker rm catan-auth-api
   
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
     - name: Submit Dependency Snapshot
