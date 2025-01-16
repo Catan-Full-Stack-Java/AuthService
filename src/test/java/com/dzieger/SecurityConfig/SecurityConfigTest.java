@@ -33,7 +33,7 @@ public class SecurityConfigTest {
         mockMvc.perform(post("/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"username\":\"test\",\"email\":\"test@email.com\",\"password\":\"Valid@123\",\"firstName\":\"John\"}"))
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
 
         mockMvc.perform(post("/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)

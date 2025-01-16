@@ -69,7 +69,7 @@ public class AuthControllerIntegrationTest {
         mockMvc.perform(post("/auth/register")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody))
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
 
         Optional<Player> player = playerRepository.findByUsername("newplayer");
         assertTrue(player.isPresent());
