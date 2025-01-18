@@ -1,6 +1,7 @@
 package com.dzieger.services;
 
 import com.dzieger.SecurityConfig.JwtUtil;
+import com.dzieger.config.Parameters;
 import com.dzieger.dtos.LoginDTO;
 import com.dzieger.dtos.OutgoingAuthenticatedPlayerDTO;
 import com.dzieger.dtos.OutgoingPlayerDTO;
@@ -10,31 +11,50 @@ import com.dzieger.exceptions.DuplicateUsernameException;
 import com.dzieger.models.Player;
 import com.dzieger.models.enums.Role;
 import com.dzieger.repositories.PlayerRepository;
+import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 @Service
 public class PlayerService {
 
     private static final Logger log = LoggerFactory.getLogger(PlayerService.class);
 
+    private String PLAYER_SERVICE_URL;
+
     private final PlayerRepository playerRepository;
-
+    private final RestTemplate restTemplate;
+    private final Parameters params;
     private final PasswordEncoder passwordEncoder;
-
     private final JwtUtil jwtUtil;
 
-    public PlayerService(PlayerRepository playerRepository, PasswordEncoder passwordEncoder, JwtUtil jwtUtil) {
+    public PlayerService(PlayerRepository playerRepository, PasswordEncoder passwordEncoder, JwtUtil jwtUtil, RestTemplate restTemplate, Parameters params) {
         this.playerRepository = playerRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtUtil = jwtUtil;
+        this.restTemplate = restTemplate;
+        this.params = params;
+    }
+
+    @PostConstruct
+    public void init() {
+        log.info("PlayerService initialized");
+
+        // TODO: Store this as a parameter
+        PLAYER_SERVICE_URL = "http://localhost:8081";
     }
 
 
@@ -53,10 +73,14 @@ public class PlayerService {
         player.setRole(Role.PLAYER);
         playerRepository.save(player);
 
+        // Send to Player Service microservice to create player profile
+        createPlayerProfile(player.getId());
+
         OutgoingPlayerDTO outgoingPlayerDTO = new OutgoingPlayerDTO();
         outgoingPlayerDTO.setFirstName(player.getFirstName());
         outgoingPlayerDTO.setUsername(player.getUsername());
         outgoingPlayerDTO.setRole(player.getRole());
+
         return outgoingPlayerDTO;
     }
 
@@ -107,5 +131,25 @@ public class PlayerService {
         }
 
         throw new UsernameNotFoundException("Player not found");
+    }
+
+    // Rest Template request to Player Service
+    private void createPlayerProfile(UUID playerId) {
+        log.info("Creating player profile for player: {}", playerId);
+
+        String url = PLAYER_SERVICE_URL + "/api/v1/player/v1/profile";
+
+        Player player = playerRepository.findById(playerId).orElseThrow(() -> new UsernameNotFoundException("Player not found"));
+        List<String> authorities = new ArrayList<>();
+        authorities.add(player.getRole());
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(jwtUtil.generateToken(player, authorities));
+
+        HttpEntity<Map<String, UUID>> request = new HttpEntity<>(Map.of("playerId", playerId), headers);
+
+        ResponseEntity<String> response = restTemplate.postForEntity(url, request, String.class);
+
+        log.info("Player profile created successfully: {}", response.getBody());
     }
 }
