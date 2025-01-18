@@ -14,6 +14,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
 import org.springframework.http.MediaType;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -44,6 +45,9 @@ public class AuthControllerIntegrationTest {
 
     @Autowired
     private JwtUtil jwtUtil;
+
+    @Autowired
+    private KafkaTemplate<String, String> kafkaTemplate;
 
     @BeforeAll
     public void setUp() {

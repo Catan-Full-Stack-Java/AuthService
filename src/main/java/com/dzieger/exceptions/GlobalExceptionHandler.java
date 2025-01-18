@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -64,6 +65,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(JwtValidationException.class)
     public ResponseEntity<Map<String, String>> handleJwtExpiredException(JwtExpiredException e) {
         return createResponse(HttpStatus.UNAUTHORIZED, e.getCause().toString(), e.getMessage());
+    }
+
+    @ExceptionHandler(HttpClientErrorException.class)
+    public ResponseEntity<Map<String, String>> handleHttpClientErrorException(HttpClientErrorException e) {
+        return createResponse(HttpStatus.BAD_REQUEST, "Bad request", e.getMessage());
     }
 
 }

@@ -10,6 +10,7 @@ import com.dzieger.exceptions.DuplicateUsernameException;
 import com.dzieger.models.Player;
 import com.dzieger.models.enums.Role;
 import com.dzieger.repositories.PlayerRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
@@ -20,11 +21,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.Optional;
@@ -42,6 +44,15 @@ public class PlayerServiceTest {
 
     @Mock
     private JwtUtil jwtUtil;
+
+    @Mock
+    private RestTemplate restTemplate;
+
+    @Mock
+    private PlayerProfileService playerProfileService;
+
+    @Mock
+    private KafkaTemplate<String, String> kafkaTemplate;
 
     @InjectMocks
     private PlayerService playerService;
@@ -64,22 +75,38 @@ public class PlayerServiceTest {
 
     @Test
     void testRegister_returnsOutgoingPlayerDTO_whenRegisterDTOIsValid() {
+        // Arrange
         RegisterDTO registerDTO = new RegisterDTO();
         registerDTO.setFirstName("John");
-        registerDTO.setUsername("jdoe");
-        registerDTO.setEmail("jdoe@test.com");
-        registerDTO.setPassword("password");
+        registerDTO.setUsername("johndoe");
+        registerDTO.setEmail("john.doe@example.com");
+        registerDTO.setPassword("ValidPassword123!");
 
-        when(playerRepository.findByUsername("jdoe")).thenReturn(Optional.empty());
-        when(playerRepository.findByEmail("jdoe@test.com")).thenReturn(Optional.empty());
+        Player mockPlayer = new Player();
+        mockPlayer.setId(UUID.randomUUID());
+        mockPlayer.setFirstName("John");
+        mockPlayer.setUsername("johndoe");
+        mockPlayer.setEmail("john.doe@example.com");
+        mockPlayer.setPassword("EncodedPassword123!");
+        mockPlayer.setRole(Role.PLAYER);
 
+        // Mock repository behavior
+        when(playerRepository.findByUsername("johndoe")).thenReturn(Optional.empty());
+        when(playerRepository.findByEmail("john.doe@example.com")).thenReturn(Optional.empty());
+        when(playerRepository.save(any(Player.class))).thenReturn(mockPlayer);
+
+        // Act
         OutgoingPlayerDTO result = playerService.register(registerDTO);
 
-        assertNotNull(result);
+        // Assert
         assertEquals("John", result.getFirstName());
-        assertEquals("jdoe", result.getUsername());
-        assertEquals(Role.PLAYER.toString(), result.getRole());
+        assertEquals("johndoe", result.getUsername());
+        assertEquals(Role.PLAYER.name(), result.getRole());
+        verify(playerRepository).save(any(Player.class));
     }
+
+
+
 
     @Test
     void testRegister_encodesPassword_whenRegisterDTOIsValid() {
@@ -89,18 +116,39 @@ public class PlayerServiceTest {
         registerDTO.setEmail("jdoe@test.com");
         registerDTO.setPassword("password");
 
+        // Create a mock Player object to return from save
+        Player savedPlayer = new Player();
+        savedPlayer.setId(UUID.randomUUID());
+        savedPlayer.setFirstName("John");
+        savedPlayer.setUsername("jdoe");
+        savedPlayer.setEmail("jdoe@test.com");
+        savedPlayer.setPassword("encodedPassword"); // Simulate encoded password
+        savedPlayer.setRole(Role.PLAYER);
+
+        // Mock repository behavior
         when(playerRepository.findByUsername("jdoe")).thenReturn(Optional.empty());
         when(playerRepository.findByEmail("jdoe@test.com")).thenReturn(Optional.empty());
+        when(playerRepository.save(any(Player.class))).thenReturn(savedPlayer);
+
+        // Mock password encoding
         when(passwordEncoder.encode(registerDTO.getPassword())).thenReturn("encodedPassword");
 
+        // Act
         playerService.register(registerDTO);
 
+        // Assert
         verify(passwordEncoder, times(1)).encode(registerDTO.getPassword());
+        verify(playerRepository, times(1)).save(argThat(player ->
+                player.getPassword().equals("encodedPassword") &&
+                        player.getUsername().equals("jdoe") &&
+                        player.getEmail().equals("jdoe@test.com")
+        ));
     }
+
+
 
     @Test
     void testRegister_throwsDuplicateUsernameException_whenUsernameAlreadyExists() {
-        // Arrange
         RegisterDTO registerDTO = new RegisterDTO();
         registerDTO.setFirstName("Jane");
         registerDTO.setUsername("jdoe2");
@@ -110,10 +158,8 @@ public class PlayerServiceTest {
         Player existingPlayer = new Player();
         existingPlayer.setUsername("jdoe2");
 
-        // Mock the repository behavior
         when(playerRepository.findByUsername("jdoe2")).thenReturn(Optional.of(existingPlayer));
 
-        // Act & Assert
         DuplicateUsernameException exception = assertThrows(
                 DuplicateUsernameException.class,
                 () -> playerService.register(registerDTO)
@@ -125,7 +171,6 @@ public class PlayerServiceTest {
 
     @Test
     void testRegister_throwsDuplicateEmailException_whenEmailAlreadyExists() {
-        // Arrange
         RegisterDTO registerDTO = new RegisterDTO();
         registerDTO.setFirstName("Jane");
         registerDTO.setUsername("test");
@@ -148,19 +193,37 @@ public class PlayerServiceTest {
 
     @Test
     void testRegister_assignsDefaultRoleToNewPlayer_whenRegisterDTOIsValid() {
+        // Arrange
         RegisterDTO registerDTO = new RegisterDTO();
         registerDTO.setFirstName("John");
         registerDTO.setUsername("jdoe");
         registerDTO.setEmail("test@email.com");
         registerDTO.setPassword("password");
 
+        // Create a mock Player object to return from save
+        Player savedPlayer = new Player();
+        savedPlayer.setId(UUID.randomUUID());
+        savedPlayer.setFirstName("John");
+        savedPlayer.setUsername("jdoe");
+        savedPlayer.setEmail("test@email.com");
+        savedPlayer.setPassword("encodedPassword"); // Simulate encoded password
+        savedPlayer.setRole(Role.PLAYER);
+
+        // Mock repository behavior
         when(playerRepository.findByUsername("jdoe")).thenReturn(Optional.empty());
         when(playerRepository.findByEmail("test@email.com")).thenReturn(Optional.empty());
+        when(playerRepository.save(any(Player.class))).thenReturn(savedPlayer);
 
+        // Act
         OutgoingPlayerDTO result = playerService.register(registerDTO);
 
+        // Assert
+        assertNotNull(result);
         assertEquals(Role.PLAYER.toString(), result.getRole());
+        verify(playerRepository, times(1)).save(any(Player.class));
     }
+
+
 
     @Test
     void testRegister_throwsException_whenRepositorySaveFails() {
@@ -174,12 +237,12 @@ public class PlayerServiceTest {
         when(playerRepository.findByEmail("test@email.com")).thenReturn(Optional.empty());
         when(playerRepository.save(any(Player.class))).thenThrow(new RuntimeException("Failed to save player"));
 
-        RuntimeException excetpion = assertThrows(
+        RuntimeException exception = assertThrows(
                 RuntimeException.class,
                 () -> playerService.register(registerDTO)
         );
 
-        assertEquals("Failed to save player", excetpion.getMessage());
+        assertEquals("Failed to save player", exception.getMessage());
     }
 
     @Test
@@ -190,17 +253,36 @@ public class PlayerServiceTest {
         registerDTO.setEmail("test@email.com");
         registerDTO.setPassword("password");
 
+        // Create a mock Player object to return from save
+        Player savedPlayer = new Player();
+        savedPlayer.setId(UUID.randomUUID());
+        savedPlayer.setFirstName("John");
+        savedPlayer.setUsername("jdoe");
+        savedPlayer.setEmail("test@email.com");
+        savedPlayer.setPassword("encodedPassword"); // Simulate encoded password
+        savedPlayer.setRole(Role.PLAYER);
+
+        // Mock repository behavior
         when(playerRepository.findByUsername("jdoe")).thenReturn(Optional.empty());
         when(playerRepository.findByEmail("test@email.com")).thenReturn(Optional.empty());
-        when(passwordEncoder.encode("password")).thenReturn("encodedPassword");
-
-        Player savedPlayer = new Player();
         when(playerRepository.save(any(Player.class))).thenReturn(savedPlayer);
 
+        // Mock password encoding
+        when(passwordEncoder.encode("password")).thenReturn("encodedPassword");
+
+
+        // Act
         playerService.register(registerDTO);
 
-        verify(playerRepository, times(1)).save(argThat(player -> player.getPassword().equals("encodedPassword")));
+        // Assert
+        verify(playerRepository, times(1)).save(argThat(player ->
+                player.getPassword().equals("encodedPassword") &&
+                        !player.getPassword().equals("password") // Ensures plaintext password isn't stored
+        ));
+        verify(passwordEncoder, times(1)).encode("password");
     }
+
+
 
     @Test
     void testRegister_storesEmailInLowerCase_whenRegisterDTOIsValid() {
@@ -210,13 +292,28 @@ public class PlayerServiceTest {
         registerDTO.setEmail("TestCase@EmaiL.com");
         registerDTO.setPassword("password");
 
+        // Create a mock Player object to return from save
+        Player savedPlayer = new Player();
+        savedPlayer.setId(UUID.randomUUID());
+        savedPlayer.setFirstName("John");
+        savedPlayer.setUsername("jdoe");
+        savedPlayer.setEmail("testcase@email.com"); // Email in lowercase
+        savedPlayer.setPassword("encodedPassword"); // Simulate encoded password
+        savedPlayer.setRole(Role.PLAYER);
+
+        // Mock repository behavior
         when(playerRepository.findByUsername("jdoe")).thenReturn(Optional.empty());
         when(playerRepository.findByEmail("testcase@email.com")).thenReturn(Optional.empty());
+        when(playerRepository.save(any(Player.class))).thenReturn(savedPlayer);
 
+        // Act
         playerService.register(registerDTO);
 
+        // Assert
         verify(playerRepository, times(1)).save(argThat(player -> player.getEmail().equals("testcase@email.com")));
     }
+
+
 
     @Test
     void testRegister_storesUsernameInLowerCase_whenRegisterDTOIsValid() {
@@ -226,16 +323,31 @@ public class PlayerServiceTest {
         registerDTO.setEmail("test@email.com");
         registerDTO.setPassword("password");
 
+        // Create a mock Player object to return from save
+        Player savedPlayer = new Player();
+        savedPlayer.setId(UUID.randomUUID());
+        savedPlayer.setFirstName("John");
+        savedPlayer.setUsername("testuser"); // Username in lowercase
+        savedPlayer.setEmail("test@email.com");
+        savedPlayer.setPassword("encodedPassword"); // Simulate encoded password
+        savedPlayer.setRole(Role.PLAYER);
+
+        // Mock repository behavior
         when(playerRepository.findByUsername("testuser")).thenReturn(Optional.empty());
         when(playerRepository.findByEmail("test@email.com")).thenReturn(Optional.empty());
+        when(playerRepository.save(any(Player.class))).thenReturn(savedPlayer);
 
+        // Act
         playerService.register(registerDTO);
 
+        // Assert
         verify(playerRepository, times(1)).save(argThat(player -> player.getUsername().equals("testuser")));
     }
 
+
     @Test
     void testRegister_handlesLargeInputValues() {
+        // Arrange: Prepare test data
         String longUsername = "a".repeat(21);
         String longEmail = "a".repeat(256) + "@email.com";
 
@@ -245,17 +357,35 @@ public class PlayerServiceTest {
         registerDTO.setEmail(longEmail);
         registerDTO.setPassword("password");
 
+        Player savedPlayer = new Player();
+        savedPlayer.setId(UUID.randomUUID());
+        savedPlayer.setUsername(longUsername);
+        savedPlayer.setEmail(longEmail);
+        savedPlayer.setRole(Role.PLAYER);
+
+        // Mock repository behavior
         when(playerRepository.findByUsername(longUsername)).thenReturn(Optional.empty());
         when(playerRepository.findByEmail(longEmail)).thenReturn(Optional.empty());
+        when(playerRepository.save(any(Player.class))).thenReturn(savedPlayer);
 
+        // Act & Assert: Verify no exceptions are thrown
         assertDoesNotThrow(() -> playerService.register(registerDTO));
+
+        // Verify repository and service interactions
+        verify(playerRepository, times(1)).findByUsername(longUsername);
+        verify(playerRepository, times(1)).findByEmail(longEmail);
+        verify(playerRepository, times(1)).save(any(Player.class));
     }
+
+
+
+
+
 
     // Login Tests
 
     @Test
-    void testLogin_whenCredentialsAreValid() {
-        // Arrange
+    void testLogin_whenCredentialsAreValid() throws JsonProcessingException {
         LoginDTO loginDTO = new LoginDTO();
         loginDTO.setUsername("jdoe");
         loginDTO.setPassword("password");
@@ -269,19 +399,16 @@ public class PlayerServiceTest {
 
         when(playerRepository.findByUsername("jdoe")).thenReturn(Optional.of(player));
         when(passwordEncoder.matches("password", "encodedPassword")).thenReturn(true);
-        when(jwtUtil.generateToken(player, List.of(Role.PLAYER.toString(), player.getUsername()))).thenReturn("mockedJwtToken");
+        when(jwtUtil.generateToken(any(Player.class), any(List.class))).thenReturn("mockedJwtToken");
 
-        // Act
         OutgoingAuthenticatedPlayerDTO result = playerService.login(loginDTO);
 
-        // Assert
         assertNotNull(result);
         assertEquals("jdoe", result.getUsername());
         assertEquals("mockedJwtToken", result.getToken());
         assertEquals("John", result.getFirstName());
         assertEquals(Role.PLAYER.toString(), result.getRole());
     }
-
 
     @Test
     void testLogin_throwsUsernameNotFoundException_whenPlayerNotFound() {
@@ -321,7 +448,7 @@ public class PlayerServiceTest {
     }
 
     @Test
-    void testLogin_isCaseInsensitive_forUsername() {
+    void testLogin_isCaseInsensitive_forUsername() throws JsonProcessingException {
         LoginDTO loginDTO = new LoginDTO();
         loginDTO.setUsername("JDOE");
         loginDTO.setPassword("password");
@@ -329,6 +456,10 @@ public class PlayerServiceTest {
         Player player = new Player();
         player.setUsername("jdoe");
         player.setPassword("encodedPassword");
+        player.setFirstName("John");
+        player.setRole(Role.PLAYER);
+        player.setId(UUID.randomUUID());
+        player.setEmail("email@email.com");
 
         when(playerRepository.findByUsername("jdoe")).thenReturn(Optional.of(player));
         when(passwordEncoder.matches("password", "encodedPassword")).thenReturn(true);
@@ -338,5 +469,4 @@ public class PlayerServiceTest {
         assertNotNull(result);
         assertEquals("jdoe", result.getUsername());
     }
-
 }

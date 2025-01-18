@@ -5,6 +5,7 @@ import com.dzieger.dtos.OutgoingAuthenticatedPlayerDTO;
 import com.dzieger.dtos.OutgoingPlayerDTO;
 import com.dzieger.dtos.RegisterDTO;
 import com.dzieger.services.PlayerService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -50,7 +51,7 @@ public class AuthController {
             @ApiResponse(responseCode = "401", description = "Bad credentials.")
     })
     @PostMapping("/login")
-    public ResponseEntity<OutgoingAuthenticatedPlayerDTO> login(@Valid @RequestBody LoginDTO loginDTO) {
+    public ResponseEntity<OutgoingAuthenticatedPlayerDTO> login(@Valid @RequestBody LoginDTO loginDTO) throws JsonProcessingException {
         log.info("Login endpoint hit");
         log.debug("Logging in player: {}", loginDTO);
         return ResponseEntity.ok(playerService.login(loginDTO));
