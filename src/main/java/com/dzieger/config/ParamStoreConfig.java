@@ -20,8 +20,11 @@ public class ParamStoreConfig {
 
     private final Environment environment;
 
+    private final String activeProfile;
+
     public ParamStoreConfig(Environment environment) {
         this.environment = environment;
+        this.activeProfile = getActiveProfile();
     }
 
     private String getActiveProfile() {

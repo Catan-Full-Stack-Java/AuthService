@@ -2,7 +2,7 @@
   <configuration default="false" name="AuthServiceApplication" type="Application" factoryName="Application" nameIsGenerated="true">
     <option name="MAIN_CLASS_NAME" value="com.dzieger.AuthServiceApplication" />
     <module name="AuthService" />
-    <option name="VM_PARAMETERS" value="-Dspring.profiles.active=dev" />
+    <option name="VM_PARAMETERS" value="-Dspring.profiles.active=test" />
     <extension name="coverage">
       <pattern>
         <option name="PATTERN" value="com.dzieger.*" />

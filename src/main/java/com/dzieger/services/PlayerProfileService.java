@@ -32,18 +32,15 @@ public class PlayerProfileService {
     }
 
     @KafkaListener(topics = "profile-creation", groupId = "player-profile-service")
-    public void createPlayerProfile(Player player, String role) {
-        log.info("Creating player profile for player: {}", player.getId());
+    public void createPlayerProfile(String token) {
+        log.info("Creating player profile for player: {}", jwtUtil.extractUserId(token));
 
         String url = PLAYER_SERVICE_URL + "/api/v1/player/v1/profile";
 
-        List<String> authorities = new ArrayList<>();
-        authorities.add(role);
-
         HttpHeaders headers = new HttpHeaders();
-        headers.setBearerAuth(jwtUtil.generateToken(player, authorities));
+        headers.setBearerAuth(token);
 
-        HttpEntity<Map<String, UUID>> request = new HttpEntity<>(Map.of("playerId", player.getId()), headers);
+        HttpEntity<Map<String, UUID>> request = new HttpEntity<>(Map.of("playerId", jwtUtil.extractUserId(token)), headers);
 
         try {
             ResponseEntity<String> response = restTemplate.postForEntity(url, request, String.class);

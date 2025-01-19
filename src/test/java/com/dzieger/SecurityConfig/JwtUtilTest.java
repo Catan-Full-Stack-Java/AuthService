@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.core.env.Environment;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.security.Key;
@@ -28,29 +29,37 @@ import static org.mockito.Mockito.when;
 class JwtUtilTest {
 
     @Mock
+    private Environment env;
+
+    @Mock
     private Parameters params;
 
     @InjectMocks
     private JwtUtil jwtUtil;
 
     private Key secretKey;
-    private final String jwtSecret = "thisisaverysecuresecretkeyforsigningjwt123";
+    private final long jwtExpiration = 5000;
+    private final String jwtSecret = "thisisaverysecretcodethatshouldnotbeshared";
     private final String jwtIssuer = "testIssuer";
-    private final long jwtExpiration = 3600000;
+
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
 
-        // Mock Parameters
+        // Mock the Environment
+        when(env.getActiveProfiles()).thenReturn(new String[]{"test"});
+
+        // Mock Parameters (if needed)
         when(params.getJwtSecret()).thenReturn(jwtSecret);
-        when(params.getJwtIssuer()).thenReturn(jwtIssuer);
         when(params.getJwtExpiration()).thenReturn(String.valueOf(jwtExpiration));
+        when(params.getJwtIssuer()).thenReturn(jwtIssuer);
 
         // Initialize JwtUtil
         jwtUtil.init();
         secretKey = Keys.hmacShaKeyFor(jwtSecret.getBytes());
     }
+
 
     @Test
     void testGenerateToken() {
@@ -97,10 +106,15 @@ class JwtUtilTest {
 
         List<String> authorities = List.of("ROLE_USER");
 
-        String token = jwtUtil.generateToken(player, authorities);
-
-        // Ensure the token has expired
-        Thread.sleep(5);
+        String token = Jwts.builder()
+                .setSubject(player.getId().toString())
+                .claim("username", player.getUsername())
+                .claim("authorities", authorities)
+                .setIssuer(jwtIssuer)
+                .setIssuedAt(new Date(System.currentTimeMillis() - 10000)) // 10 seconds in the past
+                .setExpiration(new Date(System.currentTimeMillis() - 5000)) // Expired 5 seconds ago
+                .signWith(secretKey)
+                .compact();
 
         // Assert that the JwtExpiredException is thrown
         JwtExpiredException exception = assertThrows(

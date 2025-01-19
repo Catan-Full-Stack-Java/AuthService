@@ -118,12 +118,10 @@ public class PlayerService {
                 outgoingAuthenticatedPlayerDTO.setFirstName(player.getFirstName());
                 outgoingAuthenticatedPlayerDTO.setUsername(player.getUsername());
                 outgoingAuthenticatedPlayerDTO.setRole(player.getRole());
-                outgoingAuthenticatedPlayerDTO.setToken(jwtUtil.generateToken(player, authorities));
+                String token = jwtUtil.generateToken(player, authorities);
+                outgoingAuthenticatedPlayerDTO.setToken(token);
 
-                Map<Player, String> value = Map.of(player, player.getRole());
-                String jsonValue = new ObjectMapper().writeValueAsString(value);
-
-                kafkaTemplate.send("profile-creation", jsonValue);
+                kafkaTemplate.send("profile-creation", token);
                 return outgoingAuthenticatedPlayerDTO;
             } else {
                 throw new BadCredentialsException("Invalid username or password");
